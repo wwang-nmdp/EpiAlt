@@ -172,3 +172,31 @@ plotMDS(M, cex = .9, col=rep(1:3, each=2), main="M-values")
   y <- estimateDisp(y, design=design, trend="none")
   y$common.dispersion
   summary(y$prior.df)
+
+# Test and graph
+ftGML <- read.table("/Users/wwang/Desktop/filteredGML.txt", header = TRUE)
+boxplot(ftGML$GML,ftGML$DnR, ylab= "GML(Global Methylation Level)", col= 'grey')
+scatterplot(ftGML$GML~ftGML$age, col="navy", pch = 20)
+barplot(table(ftGML$filterRate))
+
+plot(ftGML$age,ftGML$GML, col="blue", pch = 20)
+abline(lm(ftGML$GML~ftGML$age), col="red")
+line(lowess(ftGML$age,ftGML$GML))
+
+ftGML$DnR
+
+testMDS <- read.table("~/Test_2018-001228.txt", header = TRUE)
+summary.matrix(testMDS)
+par(mar=c(2, 2, 2, 2) + 0.1)
+barplot(table(testMDS$methylated), xlim=c(0,60), cex.name=0.4, col=rainbow(40))
+barplot(table(testMDS$unmethylated), xlim=c(0,60),cex.name=0.4,col=rainbow(40))
+
+
+
+MDSgml <- read.table("~/MDS_GML.txt",header = TRUE )
+MDSgml
+summary(MDSgml)
+
+# Install ChAMP
+source("https://bioconductor.org/biocLite.R")
+biocLite("ChAMP")
