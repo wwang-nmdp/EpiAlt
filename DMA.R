@@ -197,6 +197,39 @@ MDSgml <- read.table("~/MDS_GML.txt",header = TRUE )
 MDSgml
 summary(MDSgml)
 
-# Install ChAMP
+# Install ChAMP and dependencies
 source("https://bioconductor.org/biocLite.R")
 biocLite("ChAMP")
+
+# Install methylKit and dependencies
+source("https://bioconductor.org/biocLite.R")
+biocLite("methylKit")
+
+library(methylKit)
+setwd("/home/wwang/RRBS")
+mySaveFolder="/home/wwang/RRBS/result/methylKit-result"
+
+my.methRaw=processBismarkAln(location = "MCW2018-001242_pe.sam.sorted.sam",
+                              sample.id="MCW2018-001242", assembly="H. sapiens",
+                              read.context="CpG",save.folder=mySaveFolder)
+
+# get hyper methylated bases
+myDiff25p.hyper=getMethylDiff(myDiff,difference=25,qvalue=0.01,type="hyper")
+## get hypo methylated bases
+myDiff25p.hypo=getMethylDiff(myDiff,difference=25,qvalue=0.01,type="hypo")
+### get all differentially methylated bases
+myDiff25p=getMethylDiff(myDiff,difference=25,qvalue=0.01)
+
+
+#test MethylKit
+devtools::source_gist("4839e615e2401d73fe51")
+library(devtools)
+install_github("al2na/methylKit", build_vignettes=FALSE,
+               repos=BiocManager::repositories(),
+               dependencies=TRUE)
+library(methylKit)
+file.list=list(system.file("mdsdata", "/Users/wwang/Desktop/bisout/bismarkCOV/MCW2018-001228_pe.bismark.cov.gz", package = "methylKit"),system.file("mdsdata", "/Users/wwang/Desktop/bisout/bismarkCOV/MCW2018-001242_pe.bismark.cov", package = "methylKit"))
+myobj = readBismarkCoverage(file.list,sample.id=list("CASE1","ctrl1"), assembly="hg38",treatment=c(1,0))
+
+myobjDB=methRead(file.list,sample.id = list("test1","ctr1"),assembly = "hg38", treatment = c(1,0),context = "CpG", dbtype = "tabix")
+myobjDB2=readBismarkCoverage("/Users/wwang/Desktop/bisout/bismarkCOV/MCW2018-001228_pe.bismark.cov", MCW2018-001228, assembly = "hg38", treatment = c(1,0))
