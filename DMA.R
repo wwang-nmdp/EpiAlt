@@ -233,3 +233,16 @@ myobj = readBismarkCoverage(file.list,sample.id=list("CASE1","ctrl1"), assembly=
 
 myobjDB=methRead(file.list,sample.id = list("test1","ctr1"),assembly = "hg38", treatment = c(1,0),context = "CpG", dbtype = "tabix")
 myobjDB2=readBismarkCoverage("/Users/wwang/Desktop/bisout/bismarkCOV/MCW2018-001228_pe.bismark.cov", MCW2018-001228, assembly = "hg38", treatment = c(1,0))
+
+
+# Accounting for covariates
+
+covariates=data.frame(age=c(30,80,34,30,80,40))
+sim.methylBase<-dataSim(replicates=6,sites=1000,
+                        treatment=c(rep(1,3),rep(0,3)),
+                        covariates=covariates,
+                        sample.ids=c(paste0("test",1:3),paste0("ctrl",1:3))
+                        )
+my.diffMeth3<-calculateDiffMeth(sim.methylBase,
+                                covariates=covariates,
+                                overdispersion="MN",test="Chisq",mc.cores=1)
