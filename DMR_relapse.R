@@ -160,3 +160,42 @@ class(myobj[[1]])
 as(myobj[[1]],"methylRaw")
 
 ?annotateWithGeneParts
+
+
+# read the gene BED file
+refAnn<- "/Users/wwang/Desktop/gencode.v24.annotation.sorted.bed"
+gene.obj=readTranscriptFeatures(refAnn)
+# annotate differentially methylated CpGs with
+# promoter/exon/intron using annotation data
+annotateWithGeneParts(as(myDiff25p005,"GRanges"),gene.obj)
+# read the shores and flanking regions and name the flanks as shores
+# and CpG islands as CpGi
+cpg.obj= readFeatureFlank(refAnn, feature.flank.name = c("CpGi", "shores"))
+diffCpGann=annotateWithFeatureFlank(as(myDiff25p005,"GRanges"),cpg.obj$CpGi,cpg.obj$shores, feature.name = "CpGi", flank.name = "shores")
+# Summarize methylation information over a set of defined regions such as promoters or CpG islands.
+promoters=regionCounts(myobj,gene.obj$promoters)
+head(promoters[[1]])
+diff25p005promoter <- promoters[[1]]
+write.table(diff25p005promoter, "/Users/wwang/Desktop/bisout/bismarkCOV/MDS_diff10p005promoter.txt" )
+# Get the annotation of differentially methylated regions, we can get the distance to TSS and nearest gene name using the getAssociationWithTSS function from genomation package
+diffAnn=annotateWithGeneParts(as(myDiff25p005,"GRanges"),gene.obj)
+head(getAssociationWithTSS(diffAnn))
+diff25p005feature <- getAssociationWithTSS(diffAnn)
+write.table(diff25p005feature, "/Users/wwang/Desktop/bisout/bismarkCOV/MDS_diff10p005feature.txt")
+# It is also desirable to get percentage/number of differentially methylated regions that overlap with intron/exon/promoters
+getTargetAnnotationStats(diffAnn, percentage=TRUE, precedence=TRUE)
+getTargetAnnotationStats(diffAnn,percentage=TRUE,precedence=TRUE)
+plotTargetAnnotation(diffAnn,precedence=TRUE,main="differential methylation annotation")
+
+
+class(meth)
+as(meth,"GRanges")
+
+class(myDiff)
+as(myDiff,"GRanges")
+
+class(myobj[[1]])
+as(myobj[[1]],"methylRaw")
+
+?annotateWithGeneParts
+

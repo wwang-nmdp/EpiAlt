@@ -214,6 +214,9 @@ head(getAssociationWithTSS(diffAnn))
 diff25p005feature <- getAssociationWithTSS(diffAnn)
 write.table(diff25p005feature, "/Users/wwang/Desktop/bisout/bismarkCOV/MDS_diff10p005feature.txt")
 # It is also desirable to get percentage/number of differentially methylated regions that overlap with intron/exon/promoters
+diff25p005promoter <- promoters[[1]]
+write.table(diff25p005promoter, "/Users/wwang/Desktop/bisout/bismarkCOV/MDS_diff10p005promoter.txt" )
+
 getTargetAnnotationStats(diffAnn, percentage=TRUE, precedence=TRUE)
 getTargetAnnotationStats(diffAnn,percentage=TRUE,precedence=TRUE)
 plotTargetAnnotation(diffAnn,precedence=TRUE,main="differential methylation annotation")
